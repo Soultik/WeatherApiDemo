@@ -15,17 +15,14 @@ namespace WeatherDataManagerDemo.Controllers
     public class weather : ControllerBase
     {
         private IMapper _mapper { get; }
-
         private ILocationToCityConverter _locator { get; }
+        public IWeatherData _weatherData { get; }
 
-        
         [HttpGet]
         public object Get([FromQuery] string? q, [FromQuery] string? lon, 
             [FromQuery] string? lat, [FromQuery] string? apiid, 
             [FromQuery] string? units = "metric", [FromQuery] string? lang = "de")
         {
-            var weatherData = new WeatherData();
-
             string city;
 
             if (q != null && lon == null && lat == null)
@@ -44,17 +41,18 @@ namespace WeatherDataManagerDemo.Controllers
                 }
             }
 
-            var resultFromDb = weatherData.GetCurrentWeatherByCity(city);
+            var resultFromDb = _weatherData.GetCurrentWeatherByCity(city);
 
             var resultToFrontEnd = _mapper.Map<WeatherToFrontEndModel>(resultFromDb[0]);
 
             return resultToFrontEnd;
         }
 
-        public weather(IMapper mapper, ILocationToCityConverter locator)
+        public weather(IMapper mapper, ILocationToCityConverter locator, IWeatherData weatherData)
         {
             _mapper = mapper;
             _locator = locator;
+            _weatherData = weatherData;
         }
     }
 }

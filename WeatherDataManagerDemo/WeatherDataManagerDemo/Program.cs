@@ -1,3 +1,5 @@
+using WeatherDataManager.Library.DataAccess;
+using WeatherDataManager.Library.Internal.DataAccess;
 using WeatherDataManagerDemo.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(MappingConfigurator.ConfigureAutoMapper());
-builder.Services.AddSingleton<ILocationToCityConverter, LocationToCityConverter>();
+builder.Services.AddTransient<ILocationToCityConverter, LocationToCityConverter>();
+builder.Services.AddTransient<IWeatherData, WeatherData>();
+builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 
 var app = builder.Build();
 

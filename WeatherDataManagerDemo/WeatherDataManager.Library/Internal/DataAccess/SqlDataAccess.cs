@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace WeatherDataManager.Library.Internal.DataAccess
 {
-    internal class SqlDataAccess
+    public class SqlDataAccess : ISqlDataAccess
     {
-        public string GetConnectionString(string name)
+        private string GetConnectionString(string name)
         {
             var AppName = new ConfigurationBuilder().AddJsonFile("appsettings.json")
                 .Build()
